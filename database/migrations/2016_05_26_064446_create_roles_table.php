@@ -25,8 +25,8 @@ class CreateRolesTable extends Migration
             ["parent", "Parent Role", "Dropdown", false, "1", 0, 0, false, "@roles"],
             ["dept", "Department", "Dropdown", false, "1", 0, 0, false, "@departments"],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");

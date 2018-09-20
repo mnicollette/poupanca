@@ -6,53 +6,53 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class LaraAdminTest extends TestCase
 {
-	use DatabaseMigrations;
+    use DatabaseMigrations;
 
-	/**
+    /**
      * Basic setup before testing
      *
      * @return void
      */
     public function setUp()
     {
-		parent::setUp();
-		// Generate Seeds
-		$this->artisan('db:seed');
+        parent::setUp();
+        // Generate Seeds
+        $this->artisan('db:seed');
 
-		// Register Super Admin
-		$this->visit('/register')
-			->type('Taylor Otwell', 'name')
-			->type('test@example.com', 'email')
-			->type('12345678', 'password')
-			->type('12345678', 'password_confirmation')
-			->press('Register')
-			->seePageIs('/');
+        // Register Super Admin
+        $this->visit('/register')
+            ->type('Taylor Otwell', 'name')
+            ->type('test@example.com', 'email')
+            ->type('12345678', 'password')
+            ->type('12345678', 'password_confirmation')
+            ->press('Register')
+            ->seePageIs('/');
     }
 
-	/**
+    /**
      * A basic test example.
      *
      * @return void
      */
     public function testExample()
     {
-		$this->visit('/')
+        $this->visit('/')
              ->see('LaraAdmin')
-			 ->see('Taylor Otwell');
+             ->see('Taylor Otwell');
     }
 
-	/**
+    /**
      * Test Login Page.
      *
      * @return void
      */
     public function testLoginPage()
     {
-		$this->visit('/login')
+        $this->visit('/login')
             ->seePageIs('/');
     }
 
-	/**
+    /**
      * Test Login.
      *
      * @return void
@@ -60,32 +60,32 @@ class LaraAdminTest extends TestCase
     public function testLoginRequiredFields()
     {
         $this->visit('/logout')
-			->seePageIs('/')
-			->click('Login')
-			->type('', 'email')
+            ->seePageIs('/')
+            ->click('Login')
+            ->type('', 'email')
             ->type('', 'password')
             ->press('Sign In')
             ->see('The email field is required')
             ->see('The password field is required');
     }
 
-	/**
+    /**
      * Test Login Page.
      *
      * @return void
      */
     public function testLogin()
     {
-		$this->visit('/login')
+        $this->visit('/login')
             ->seePageIs('/')
-			->visit('/logout')
-			->seePageIs('/')
-			->click('Login')
-			->see('Sign in to start your session')
-			->type('test@example.com', 'email')
-			->type('12345678', 'password')
-			->press('Sign In')
-			->seePageIs('/')
-			->see('Taylor Otwell');
+            ->visit('/logout')
+            ->seePageIs('/')
+            ->click('Login')
+            ->see('Sign in to start your session')
+            ->type('test@example.com', 'email')
+            ->type('12345678', 'password')
+            ->press('Sign In')
+            ->seePageIs('/')
+            ->see('Taylor Otwell');
     }
 }

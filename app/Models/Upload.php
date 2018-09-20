@@ -12,18 +12,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Upload extends Model
 {
     use SoftDeletes;
-	
-	protected $table = 'uploads';
-	
-	protected $hidden = [
+    
+    protected $table = 'uploads';
+    
+    protected $hidden = [
         
     ];
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
-	/**
+    /**
      * Get the user that owns upload.
      */
     public function user()

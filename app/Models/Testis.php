@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Testis extends Model
 {
     use SoftDeletes;
-	
-	protected $table = 'testes';
-	
-	protected $hidden = [
+    
+    protected $table = 'testes';
+    
+    protected $hidden = [
         
     ];
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 }

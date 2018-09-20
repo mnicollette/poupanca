@@ -19,7 +19,7 @@ class CreateTestesTable extends Migration
         // This Module has been deleted.
         // You can remove this file after migrate:reset
         
-		if (Schema::hasTable('testes')) {
+        if (Schema::hasTable('testes')) {
             Schema::drop('testes');
         }
     }

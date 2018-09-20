@@ -31,8 +31,8 @@ class CreateOrganizationsTable extends Migration
             ["profile_image", "Profile Image", "Image", false, "", 0, 250, false],
             ["profile", "Company Profile", "File", false, "", 0, 250, false],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");

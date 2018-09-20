@@ -23,23 +23,23 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use EntrustUserTrait;
 
     protected $table = 'users';
-	
-	/**
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-	protected $fillable = [
-		'name', 'email', 'password', "role", "context_id", "type"
-	];
-	
-	/**
+    protected $fillable = [
+        'name', 'email', 'password', "role", "context_id", "type"
+    ];
+    
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-	protected $hidden = [
-		'password', 'remember_token',
+    protected $hidden = [
+        'password', 'remember_token',
     ];
     
     // protected $dates = ['deleted_at'];

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ExampleTest extends TestCase
 {
-	use DatabaseMigrations;
+    use DatabaseMigrations;
 
     /**
      * A basic functional test example.
@@ -15,7 +15,7 @@ class ExampleTest extends TestCase
      */
     public function testBasicExample()
     {
-		$this->artisan('db:seed');
+        $this->artisan('db:seed');
 
         $this->visit('/')
              ->see('LaraAdmin');

@@ -18,7 +18,7 @@ class APIController extends Controller
         return response(array(
                 'error' => false,
                 'pontos' =>$pontos->toArray(),
-               ),200);
+               ), 200);
     }
     public function show($id)
     {
@@ -26,6 +26,6 @@ class APIController extends Controller
         return response(array(
                 'error' => false,
                 'pontos' =>$pontos,
-               ),200);
+               ), 200);
     }
 }

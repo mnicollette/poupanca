@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(array('prefix' => 'api'), function() {
-    Route::resource('restful-apis','Api\APIController');
+Route::group(array('prefix' => 'api'), function () {
+    Route::resource('restful-apis', 'Api\APIController');
 });
 
 /* ================== Homepage + Admin Routes ================== */

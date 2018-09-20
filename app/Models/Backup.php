@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Backup extends Model
 {
     use SoftDeletes;
-	
-	protected $table = 'backups';
-	
-	protected $hidden = [
+    
+    protected $table = 'backups';
+    
+    protected $hidden = [
         
     ];
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 }

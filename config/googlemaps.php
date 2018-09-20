@@ -25,7 +25,7 @@ return [
     | SSL peer (SSL certificate validation)
     |
      */
-    'ssl_verify_peer' => FALSE,
+    'ssl_verify_peer' => false,
 
     /*
     |--------------------------------------------------------------------------

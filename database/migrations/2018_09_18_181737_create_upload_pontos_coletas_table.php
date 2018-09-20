@@ -21,8 +21,8 @@ class CreateUploadPontosColetasTable extends Migration
             ["file", "Arquivo CSV", "File", false, "", 0, 0, false],
             ["modulo", "Modulo", "Dropdown", false, "Pontos Coleta", 0, 0, false, ["Categoria Empresa","Material","Pontos Coleta"]],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");

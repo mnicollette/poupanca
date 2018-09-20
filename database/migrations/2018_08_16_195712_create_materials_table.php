@@ -20,8 +20,8 @@ class CreateMaterialsTable extends Migration
         Module::generate("Materials", 'materials', 'material', 'fa-cube', [
             ["material", "Tipo de Material", "String", false, "", 0, 256, true],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");
