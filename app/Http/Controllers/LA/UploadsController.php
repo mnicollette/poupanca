@@ -38,7 +38,7 @@ class UploadsController extends Controller
         $this->middleware('auth', ['except' => 'get_file']);
         
         $module = Module::get('Uploads');
-        $listing_cols_temp = array();
+        $listing_cols_temp = [];
         foreach ($this->listing_cols as $col) {
             if ($col == 'id') {
                 $listing_cols_temp[] = $col;
@@ -232,7 +232,7 @@ class UploadsController extends Controller
     public function uploaded_files()
     {
         if (Module::hasAccess("Uploads", "view")) {
-            $uploads = array();
+            $uploads = [];
     
             // print_r(Auth::user()->roles);
             if (Entrust::hasRole('SUPER_ADMIN')) {
@@ -245,9 +245,9 @@ class UploadsController extends Controller
                     $uploads = Upload::all();
                 }
             }
-            $uploads2 = array();
+            $uploads2 = [];
             foreach ($uploads as $upload) {
-                $u = (object) array();
+                $u = (object) [];
                 $u->id = $upload->id;
                 $u->name = $upload->name;
                 $u->extension = $upload->extension;

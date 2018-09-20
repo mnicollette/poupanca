@@ -121,7 +121,7 @@ class RolesController extends Controller
                 $module->row = $role;
                 
                 $modules_arr = DB::table('modules')->get();
-                $modules_access = array();
+                $modules_access = [];
                 foreach ($modules_arr as $module_obj) {
                     $module_obj->accesses = Module::getRoleAccess($module_obj->id, $id)[0];
                     $modules_access[] = $module_obj;
@@ -278,7 +278,7 @@ class RolesController extends Controller
             $module->row = $role;
             
             $modules_arr = DB::table('modules')->get();
-            $modules_access = array();
+            $modules_access = [];
             foreach ($modules_arr as $module_obj) {
                 $module_obj->accesses = Module::getRoleAccess($module_obj->id, $id)[0];
                 $modules_access[] = $module_obj;

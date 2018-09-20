@@ -37,7 +37,7 @@ class DashboardController extends Controller
     {
 
         $response = Curl::to('https://i2waste.azurewebsites.net/api/Users/Autenticate')
-        ->withData(array( 'Email' => 'nicollette@mpiza.com.br', 'Password' => '87Z.yaRb' ))
+        ->withData([ 'Email' => 'nicollette@mpiza.com.br', 'Password' => '87Z.yaRb' ])
         ->asJson(true)
         ->post();
         $token = $response['authToken'];
