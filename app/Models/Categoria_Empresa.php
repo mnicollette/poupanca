@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Categoria_Empresa extends Model
 {
     use SoftDeletes;
-	
-	protected $table = 'categoria_empresas';
-	
-	protected $hidden = [
+    
+    protected $table = 'categoria_empresas';
+    
+    protected $hidden = [
         
     ];
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 }

@@ -13,13 +13,13 @@ class Mapa extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'ponto_coletas';
+    protected $table = 'ponto_coletas';
 
-	protected $hidden = [
+    protected $hidden = [
 
     ];
 
-	protected $guarded = [];
+    protected $guarded = [];
 
-	protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 }

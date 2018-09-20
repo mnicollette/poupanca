@@ -15,17 +15,17 @@ class APIController extends Controller
     public function index(Request $request)
     {
         $pontos = Ponto_Coleta::get();
-        return response(array(
+        return response([
                 'error' => false,
                 'pontos' =>$pontos->toArray(),
-               ),200);
+               ], 200);
     }
     public function show($id)
     {
         $pontos = Ponto_Coleta::find($id);
-        return response(array(
+        return response([
                 'error' => false,
                 'pontos' =>$pontos,
-               ),200);
+               ], 200);
     }
 }

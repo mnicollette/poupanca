@@ -27,8 +27,8 @@ class CreateUploadsTable extends Migration
             ["hash", "Hash", "String", false, "", 0, 250, false],
             ["public", "Is Public", "Checkbox", false, "0", 0, 0, false],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");

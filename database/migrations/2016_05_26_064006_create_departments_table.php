@@ -23,8 +23,8 @@ class CreateDepartmentsTable extends Migration
             ["tags", "Tags", "Taginput", false, [], 0, 0, false],
             ["color", "Color", "String", false, "", 0, 50, true],
         ]);
-		
-		/*
+        
+        /*
 		Row Format:
 		["field_name_db", "Label", "UI Type", "Unique", "Default_Value", "min_length", "max_length", "Required", "Pop_values"]
         Module::generate("Module_Name", "Table_Name", "view_column_name" "Fields_Array");
