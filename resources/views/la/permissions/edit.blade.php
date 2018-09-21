@@ -24,14 +24,14 @@
 
 <div class="box">
 	<div class="box-header">
-		
+
 	</div>
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				{!! Form::model($permission, ['route' => [config('laraadmin.adminRoute') . '.permissions.update', $permission->id ], 'method'=>'PUT', 'id' => 'permission-edit-form']) !!}
+				{!! Form::model($permission, ['route' => ['permissions.update', $permission->id ], 'method'=>'PUT', 'id' => 'permission-edit-form']) !!}
 					@la_form($module)
-					
+
 					{{--
 					@la_input($module, 'name')
 					@la_input($module, 'display_name')
@@ -53,7 +53,7 @@
 <script>
 $(function () {
 	$("#permission-edit-form").validate({
-		
+
 	});
 });
 </script>

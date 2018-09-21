@@ -24,14 +24,14 @@
 
 <div class="box">
 	<div class="box-header">
-		
+
 	</div>
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				{!! Form::model($categoria_empresa, ['route' => [config('laraadmin.adminRoute') . '.categoria_empresas.update', $categoria_empresa->id ], 'method'=>'PUT', 'id' => 'categoria_empresa-edit-form']) !!}
+				{!! Form::model($categoria_empresa, ['route' => ['categoria_empresas.update', $categoria_empresa->id ], 'method'=>'PUT', 'id' => 'categoria_empresa-edit-form']) !!}
 					@la_form($module)
-					
+
 					{{--
 					@la_input($module, 'categoria')
 					--}}
@@ -51,7 +51,7 @@
 <script>
 $(function () {
 	$("#categoria_empresa-edit-form").validate({
-		
+
 	});
 });
 </script>

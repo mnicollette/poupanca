@@ -27,7 +27,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -62,10 +62,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+      // TODO: This is Not Standard. Need to find alternative
+      Eloquent::unguard();
+
+      $employee = Employee::create([
+          'name' => $data['name'],
+          'designation' => "Super Admin",
+          'mobile' => "8888888888",
+          'mobile2' => "",
+          'email' => $data['email'],
+          'gender' => 'Male',
+          'dept' => "1",
+          'city' => "Pune",
+          'address' => "Karve nagar, Pune 411030",
+          'about' => "About user / biography",
+          'date_birth' => date("Y-m-d"),
+          'date_hire' => date("Y-m-d"),
+          'date_left' => date("Y-m-d"),
+          'salary_cur' => 0,
+      ]);
+
+      $user = User::create([
+          'name' => $data['name'],
+          'email' => $data['email'],
+          'password' => bcrypt($data['password']),
+          'context_id' => $employee->id,
+          'type' => "Employee",
+      ]);
+      $role = Role::where('name', 'SUPER_ADMIN')->first();
+      $user->attachRole($role);
+
+      return $user;
     }
 }

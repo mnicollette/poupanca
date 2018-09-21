@@ -26,7 +26,7 @@ class RolesController extends Controller
     public $show_action = true;
     public $view_col = 'name';
     public $listing_cols = ['id', 'name', 'display_name', 'parent', 'dept'];
-    
+
     public function __construct()
     {
         // Field Access of Listing Columns
@@ -39,7 +39,7 @@ class RolesController extends Controller
             $this->listing_cols = ModuleFields::listingColumnAccessScan('Roles', $this->listing_cols);
         }
     }
-    
+
     /**
      * Display a listing of the Roles.
      *
@@ -48,7 +48,7 @@ class RolesController extends Controller
     public function index()
     {
         $module = Module::get('Roles');
-        
+
         if (Module::hasAccess($module->id)) {
             return View('la.roles.index', [
                 'show_actions' => $this->show_action,
@@ -80,27 +80,27 @@ class RolesController extends Controller
     {
         if (Module::hasAccess("Roles", "create")) {
             $rules = Module::validateRules("Roles", $request);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            
+
             $request->name = str_replace(" ", "_", strtoupper(trim($request->name)));
-            
+
             $insert_id = Module::insert("Roles", $request);
-            
+
             $modules = Module::all();
             foreach ($modules as $module) {
                 Module::setDefaultRoleAccess($module->id, $insert_id, "readonly");
             }
-            
+
             $role = Role::find($insert_id);
             $perm = Permission::where("name", "ADMIN_PANEL")->first();
             $role->attachPermission($perm);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.roles.index');
+
+            return redirect()->route('roles.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -119,7 +119,7 @@ class RolesController extends Controller
             if (isset($role->id)) {
                 $module = Module::get('Roles');
                 $module->row = $role;
-                
+
                 $modules_arr = DB::table('modules')->get();
                 $modules_access = [];
                 foreach ($modules_arr as $module_obj) {
@@ -156,9 +156,9 @@ class RolesController extends Controller
             $role = Role::find($id);
             if (isset($role->id)) {
                 $module = Module::get('Roles');
-                
+
                 $module->row = $role;
-                
+
                 return view('la.roles.edit', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -185,23 +185,23 @@ class RolesController extends Controller
     {
         if (Module::hasAccess("Roles", "edit")) {
             $rules = Module::validateRules("Roles", $request, true);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
                 ;
             }
-            
+
             $request->name = str_replace(" ", "_", strtoupper(trim($request->name)));
-            
+
             if ($request->name == "SUPER_ADMIN") {
                 $request->parent = 0;
             }
-            
+
             $insert_id = Module::updateRow("Roles", $request, $id);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.roles.index');
+
+            return redirect()->route('roles.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -217,14 +217,14 @@ class RolesController extends Controller
     {
         if (Module::hasAccess("Roles", "delete")) {
             Role::find($id)->delete();
-            
+
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.roles.index');
+            return redirect()->route('roles.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
     }
-    
+
     /**
      * Datatable Ajax fetch
      *
@@ -237,7 +237,7 @@ class RolesController extends Controller
         $data = $out->getData();
 
         $fields_popup = ModuleFields::getModuleFields('Roles');
-        
+
         for ($i=0; $i < count($data->data); $i++) {
             for ($j=0; $j < count($this->listing_cols); $j++) {
                 $col = $this->listing_cols[$j];
@@ -251,15 +251,15 @@ class RolesController extends Controller
                 //    $data->data[$i][$j];
                 // }
             }
-            
+
             if ($this->show_action) {
                 $output = '';
                 if (Module::hasAccess("Roles", "edit")) {
                     $output .= '<a href="'.url(config('laraadmin.adminRoute') . '/roles/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
-                
+
                 if (Module::hasAccess("Roles", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.roles.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['roles.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }
@@ -269,26 +269,26 @@ class RolesController extends Controller
         $out->setData($data);
         return $out;
     }
-    
+
     public function save_module_role_permissions(Request $request, $id)
     {
         if (Entrust::hasRole('SUPER_ADMIN')) {
             $role = Role::find($id);
             $module = Module::get('Roles');
             $module->row = $role;
-            
+
             $modules_arr = DB::table('modules')->get();
             $modules_access = [];
             foreach ($modules_arr as $module_obj) {
                 $module_obj->accesses = Module::getRoleAccess($module_obj->id, $id)[0];
                 $modules_access[] = $module_obj;
             }
-        
+
             $now = date("Y-m-d H:i:s");
-            
+
             foreach ($modules_access as $module) {
                 /* =============== role_module_fields =============== */
-    
+
                 foreach ($module->accesses->fields as $field) {
                     $field_name = $field['colname'].'_'.$module->id.'_'.$role->id;
                     $field_value = $request->$field_name;
@@ -299,7 +299,7 @@ class RolesController extends Controller
                     } else if ($field_value == 2) {
                         $access = 'write';
                     }
-    
+
                     $query = DB::table('role_module_fields')->where('role_id', $role->id)->where('field_id', $field['id']);
                     if ($query->count() == 0) {
                         DB::insert('insert into role_module_fields (role_id, field_id, access, created_at, updated_at) values (?, ?, ?, ?, ?)', [$role->id, $field['id'], $access, $now, $now]);
@@ -307,9 +307,9 @@ class RolesController extends Controller
                         DB:: table('role_module_fields')->where('role_id', $role->id)->where('field_id', $field['id'])->update(['access' => $access]);
                     }
                 }
-                
+
                 /* =============== role_module =============== */
-    
+
                 $module_name = 'module_'.$module->id;
                 if (isset($request->$module_name)) {
                     $view = 'module_view_'.$module->id;
@@ -336,7 +336,7 @@ class RolesController extends Controller
                     } else {
                         $delete = 0;
                     }
-                    
+
                     $query = DB::table('role_module')->where('role_id', $id)->where('module_id', $module->id);
                     if ($query->count() == 0) {
                         DB::insert('insert into role_module (role_id, module_id, acc_view, acc_create, acc_edit, acc_delete, created_at, updated_at) values (?, ?, ?, ?, ?, ?, ?, ?)', [$id, $module->id, $view, $create, $edit, $delete, $now, $now]);

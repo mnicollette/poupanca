@@ -38,14 +38,14 @@ class LAConfigController extends Controller
     public function index()
     {
         $configs = LAConfigs::getAll();
-        
+
         return View('la.la_configs.index', [
             'configs' => $configs,
             'skins' => $this->skin_array,
             'layouts' => $this->layout_array
         ]);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -65,7 +65,7 @@ class LAConfigController extends Controller
         foreach ($all as $key => $value) {
             LAConfigs::where('key', $key)->update(['value' => $value]);
         }
-        
+
         return redirect(config('laraadmin.adminRoute')."/la_configs");
     }
 }

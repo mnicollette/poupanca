@@ -24,14 +24,14 @@
 
 <div class="box">
 	<div class="box-header">
-		
+
 	</div>
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				{!! Form::model($department, ['route' => [config('laraadmin.adminRoute') . '.departments.update', $department->id ], 'method'=>'PUT', 'id' => 'department-edit-form']) !!}
+				{!! Form::model($department, ['route' => ['departments.update', $department->id ], 'method'=>'PUT', 'id' => 'department-edit-form']) !!}
 					@la_form($module)
-					
+
 					{{--
 					@la_input($module, 'name')
 					@la_input($module, 'tags')
@@ -53,7 +53,7 @@
 <script>
 $(function () {
 	$("#department-edit-form").validate({
-		
+
 	});
 });
 </script>

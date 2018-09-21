@@ -176,6 +176,8 @@ return [
 
         Ixudra\Curl\CurlServiceProvider::class,
 
+        Spatie\Backup\BackupServiceProvider::class,
+
     ],
 
     /*

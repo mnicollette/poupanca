@@ -12,7 +12,7 @@
 /* ================== Homepage ================== */
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
-Route::auth();
+Route::Auth();
 
 /* ================== Access Uploaded Files ================== */
 Route::get('files/{hash}/{name}', 'LA\UploadsController@get_file');
@@ -31,7 +31,7 @@ if (\Dwij\Laraadmin\Helpers\LAHelper::laravel_ver() == 5.3) {
     Route::get('/logout', 'Auth\LoginController@logout');
 }
 
-Route::group(['prefix' => $as, 'middleware' => ['auth', 'permission:ADMIN_PANEL']], function () {
+Route::group(['middleware' => ['auth', 'permission:ADMIN_PANEL']], function () {
 
     /* ================== Dashboard ================== */
 

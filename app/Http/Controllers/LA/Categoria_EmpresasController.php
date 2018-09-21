@@ -24,7 +24,7 @@ class Categoria_EmpresasController extends Controller
     public $show_action = true;
     public $view_col = 'categoria';
     public $listing_cols = ['id', 'categoria'];
-    
+
     public function __construct()
     {
         // Field Access of Listing Columns
@@ -37,7 +37,7 @@ class Categoria_EmpresasController extends Controller
             $this->listing_cols = ModuleFields::listingColumnAccessScan('Categoria_Empresas', $this->listing_cols);
         }
     }
-    
+
     /**
      * Display a listing of the Categoria_Empresas.
      *
@@ -46,7 +46,7 @@ class Categoria_EmpresasController extends Controller
     public function index()
     {
         $module = Module::get('Categoria_Empresas');
-        
+        //dd($module);
         if (Module::hasAccess($module->id)) {
             return View('la.categoria_empresas.index', [
                 'show_actions' => $this->show_action,
@@ -78,16 +78,16 @@ class Categoria_EmpresasController extends Controller
     {
         if (Module::hasAccess("Categoria_Empresas", "create")) {
             $rules = Module::validateRules("Categoria_Empresas", $request);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            
+
             $insert_id = Module::insert("Categoria_Empresas", $request);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.categoria_empresas.index');
+
+            return redirect()->route('categoria_empresas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -106,7 +106,7 @@ class Categoria_EmpresasController extends Controller
             if (isset($categoria_empresa->id)) {
                 $module = Module::get('Categoria_Empresas');
                 $module->row = $categoria_empresa;
-                
+
                 return view('la.categoria_empresas.show', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -136,9 +136,9 @@ class Categoria_EmpresasController extends Controller
             $categoria_empresa = Categoria_Empresa::find($id);
             if (isset($categoria_empresa->id)) {
                 $module = Module::get('Categoria_Empresas');
-                
+
                 $module->row = $categoria_empresa;
-                
+
                 return view('la.categoria_empresas.edit', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -165,17 +165,17 @@ class Categoria_EmpresasController extends Controller
     {
         if (Module::hasAccess("Categoria_Empresas", "edit")) {
             $rules = Module::validateRules("Categoria_Empresas", $request, true);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
                 ;
             }
-            
+
             $insert_id = Module::updateRow("Categoria_Empresas", $request, $id);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.categoria_empresas.index');
+
+            return redirect()->route('categoria_empresas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -191,14 +191,14 @@ class Categoria_EmpresasController extends Controller
     {
         if (Module::hasAccess("Categoria_Empresas", "delete")) {
             Categoria_Empresa::find($id)->delete();
-            
+
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.categoria_empresas.index');
+            return redirect()->route('categoria_empresas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
     }
-    
+
     /**
      * Datatable Ajax fetch
      *
@@ -209,9 +209,9 @@ class Categoria_EmpresasController extends Controller
         $values = DB::table('categoria_empresas')->select($this->listing_cols)->whereNull('deleted_at');
         $out = Datatables::of($values)->make();
         $data = $out->getData();
-
+//dd($data);
         $fields_popup = ModuleFields::getModuleFields('Categoria_Empresas');
-        
+
         for ($i=0; $i < count($data->data); $i++) {
             for ($j=0; $j < count($this->listing_cols); $j++) {
                 $col = $this->listing_cols[$j];
@@ -219,28 +219,34 @@ class Categoria_EmpresasController extends Controller
                     $data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
                 }
                 if ($col == $this->view_col) {
-                    $data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/categoria_empresas/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
+                    $data->data[$i][$j] = $data->data[$i][$j];
                 }
+                /*if ($col == $this->view_col) {
+                    $data->data[$i][$j] = '<a href="'.url('/admin/categoria_empresas/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
+                }*/
+
                 // else if($col == "author") {
                 //    $data->data[$i][$j];
                 // }
             }
-            
+
             if ($this->show_action) {
                 $output = '';
                 if (Module::hasAccess("Categoria_Empresas", "edit")) {
                     $output .= '<a href="'.url(config('laraadmin.adminRoute') . '/categoria_empresas/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
-                
+
                 if (Module::hasAccess("Categoria_Empresas", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.categoria_empresas.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['categoria_empresas.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
+                    $output .= ' <input type="hidden" name="_method" value="DELETE">';
                     $output .= Form::close();
                 }
                 $data->data[$i][] = (string)$output;
             }
         }
         $out->setData($data);
+        //dd($out);
         return $out;
     }
 }

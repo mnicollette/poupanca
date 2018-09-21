@@ -24,7 +24,7 @@ class DepartmentsController extends Controller
     public $show_action = true;
     public $view_col = 'name';
     public $listing_cols = ['id', 'name'];
-    
+
     public function __construct()
     {
         // Field Access of Listing Columns
@@ -37,7 +37,7 @@ class DepartmentsController extends Controller
             $this->listing_cols = ModuleFields::listingColumnAccessScan('Departments', $this->listing_cols);
         }
     }
-    
+
     /**
      * Display a listing of the Departments.
      *
@@ -46,7 +46,7 @@ class DepartmentsController extends Controller
     public function index()
     {
         $module = Module::get('Departments');
-        
+
         if (Module::hasAccess($module->id)) {
             return View('la.departments.index', [
                 'show_actions' => $this->show_action,
@@ -78,16 +78,16 @@ class DepartmentsController extends Controller
     {
         if (Module::hasAccess("Departments", "create")) {
             $rules = Module::validateRules("Departments", $request);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            
+
             $insert_id = Module::insert("Departments", $request);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.departments.index');
+
+            return redirect()->route('departments.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -106,7 +106,7 @@ class DepartmentsController extends Controller
             if (isset($department->id)) {
                 $module = Module::get('Departments');
                 $module->row = $department;
-                
+
                 return view('la.departments.show', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -136,9 +136,9 @@ class DepartmentsController extends Controller
             $department = Department::find($id);
             if (isset($department->id)) {
                 $module = Module::get('Departments');
-                
+
                 $module->row = $department;
-                
+
                 return view('la.departments.edit', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -165,17 +165,17 @@ class DepartmentsController extends Controller
     {
         if (Module::hasAccess("Departments", "edit")) {
             $rules = Module::validateRules("Departments", $request, true);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
                 ;
             }
-            
+
             $insert_id = Module::updateRow("Departments", $request, $id);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.departments.index');
+
+            return redirect()->route('departments.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -191,14 +191,14 @@ class DepartmentsController extends Controller
     {
         if (Module::hasAccess("Departments", "delete")) {
             Department::find($id)->delete();
-            
+
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.departments.index');
+            return redirect()->route('departments.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
     }
-    
+
     /**
      * Datatable Ajax fetch
      *
@@ -211,7 +211,7 @@ class DepartmentsController extends Controller
         $data = $out->getData();
 
         $fields_popup = ModuleFields::getModuleFields('Departments');
-        
+
         for ($i=0; $i < count($data->data); $i++) {
             for ($j=0; $j < count($this->listing_cols); $j++) {
                 $col = $this->listing_cols[$j];
@@ -225,15 +225,15 @@ class DepartmentsController extends Controller
                 //    $data->data[$i][$j];
                 // }
             }
-            
+
             if ($this->show_action) {
                 $output = '';
                 if (Module::hasAccess("Departments", "edit")) {
                     $output .= '<a href="'.url(config('laraadmin.adminRoute') . '/departments/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
-                
+
                 if (Module::hasAccess("Departments", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.departments.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['departments.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }

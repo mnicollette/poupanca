@@ -24,7 +24,7 @@ class MaterialsController extends Controller
     public $show_action = true;
     public $view_col = 'material';
     public $listing_cols = ['id', 'material'];
-    
+
     public function __construct()
     {
         // Field Access of Listing Columns
@@ -37,7 +37,7 @@ class MaterialsController extends Controller
             $this->listing_cols = ModuleFields::listingColumnAccessScan('Materials', $this->listing_cols);
         }
     }
-    
+
     /**
      * Display a listing of the Materials.
      *
@@ -46,7 +46,7 @@ class MaterialsController extends Controller
     public function index()
     {
         $module = Module::get('Materials');
-        
+
         if (Module::hasAccess($module->id)) {
             return View('la.materials.index', [
                 'show_actions' => $this->show_action,
@@ -78,16 +78,16 @@ class MaterialsController extends Controller
     {
         if (Module::hasAccess("Materials", "create")) {
             $rules = Module::validateRules("Materials", $request);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
             }
-            
+
             $insert_id = Module::insert("Materials", $request);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.materials.index');
+
+            return redirect()->route('materials.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -106,7 +106,7 @@ class MaterialsController extends Controller
             if (isset($material->id)) {
                 $module = Module::get('Materials');
                 $module->row = $material;
-                
+
                 return view('la.materials.show', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -136,9 +136,9 @@ class MaterialsController extends Controller
             $material = Material::find($id);
             if (isset($material->id)) {
                 $module = Module::get('Materials');
-                
+
                 $module->row = $material;
-                
+
                 return view('la.materials.edit', [
                     'module' => $module,
                     'view_col' => $this->view_col,
@@ -165,17 +165,17 @@ class MaterialsController extends Controller
     {
         if (Module::hasAccess("Materials", "edit")) {
             $rules = Module::validateRules("Materials", $request, true);
-            
+
             $validator = Validator::make($request->all(), $rules);
-            
+
             if ($validator->fails()) {
                 return redirect()->back()->withErrors($validator)->withInput();
                 ;
             }
-            
+
             $insert_id = Module::updateRow("Materials", $request, $id);
-            
-            return redirect()->route(config('laraadmin.adminRoute') . '.materials.index');
+
+            return redirect()->route('materials.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -191,14 +191,14 @@ class MaterialsController extends Controller
     {
         if (Module::hasAccess("Materials", "delete")) {
             Material::find($id)->delete();
-            
+
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.materials.index');
+            return redirect()->route('materials.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
     }
-    
+
     /**
      * Datatable Ajax fetch
      *
@@ -211,7 +211,7 @@ class MaterialsController extends Controller
         $data = $out->getData();
 
         $fields_popup = ModuleFields::getModuleFields('Materials');
-        
+
         for ($i=0; $i < count($data->data); $i++) {
             for ($j=0; $j < count($this->listing_cols); $j++) {
                 $col = $this->listing_cols[$j];
@@ -219,21 +219,26 @@ class MaterialsController extends Controller
                     $data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
                 }
                 if ($col == $this->view_col) {
+                    $data->data[$i][$j] = $data->data[$i][$j];
+                }
+                /*
+                if ($col == $this->view_col) {
                     $data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/materials/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
                 }
+                */
                 // else if($col == "author") {
                 //    $data->data[$i][$j];
                 // }
             }
-            
+
             if ($this->show_action) {
                 $output = '';
                 if (Module::hasAccess("Materials", "edit")) {
                     $output .= '<a href="'.url(config('laraadmin.adminRoute') . '/materials/'.$data->data[$i][0].'/edit').'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-edit"></i></a>';
                 }
-                
+
                 if (Module::hasAccess("Materials", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.materials.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['materials.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }

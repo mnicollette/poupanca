@@ -84,9 +84,9 @@
 			@la_access("Permissions", "edit")
 				<a href="{{ url(config('laraadmin.adminRoute') . '/permissions/'.$permission->id.'/edit') }}" class="btn btn-xs btn-edit btn-default"><i class="fa fa-pencil"></i></a><br>
 			@endla_access
-			
+
 			@la_access("Permissions", "delete")
-				{{ Form::open(['route' => [config('laraadmin.adminRoute') . '.permissions.destroy', $permission->id], 'method' => 'delete', 'style'=>'display:inline']) }}
+				{{ Form::open(['route' => ['permissions.destroy', $permission->id], 'method' => 'delete', 'style'=>'display:inline']) }}
 					<button class="btn btn-default btn-delete btn-xs" type="submit"><i class="fa fa-times"></i></button>
 				{{ Form::close() }}
 			@endla_access
@@ -141,7 +141,7 @@
 									</div>
 								</div>
 							@endforeach
-							
+
 							<div class="form-group">
 								<label for="ratings_innovation" class="col-md-2"></label>
 								<div class="col-md-10 fvalue star_class">

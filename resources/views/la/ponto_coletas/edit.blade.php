@@ -37,7 +37,7 @@
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				{!! Form::model($ponto_coleta, ['route' => [config('laraadmin.adminRoute') . '.ponto_coletas.update', $ponto_coleta->id ], 'method'=>'PUT', 'id' => 'ponto_coleta-edit-form']) !!}
+				{!! Form::model($ponto_coleta, ['route' => ['ponto_coletas.update', $ponto_coleta->id ], 'method'=>'PUT', 'id' => 'ponto_coleta-edit-form']) !!}
 
 					<div class="modal-body">
 						<div class="box-body">

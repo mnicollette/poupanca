@@ -24,14 +24,14 @@
 
 <div class="box">
 	<div class="box-header">
-		
+
 	</div>
 	<div class="box-body">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				{!! Form::model($material, ['route' => [config('laraadmin.adminRoute') . '.materials.update', $material->id ], 'method'=>'PUT', 'id' => 'material-edit-form']) !!}
+				{!! Form::model($material, ['route' => ['materials.update', $material->id ], 'method'=>'PUT', 'id' => 'material-edit-form']) !!}
 					@la_form($module)
-					
+
 					{{--
 					@la_input($module, 'material')
 					--}}
@@ -51,7 +51,7 @@
 <script>
 $(function () {
 	$("#material-edit-form").validate({
-		
+
 	});
 });
 </script>

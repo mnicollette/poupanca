@@ -93,7 +93,7 @@ class Ponto_ColetasController extends Controller
 
             $insert_id = Module::insert("Ponto_Coletas", $request);
 
-            return redirect()->route(config('laraadmin.adminRoute') . '.ponto_coletas.index');
+            return redirect()->route('ponto_coletas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -191,7 +191,7 @@ class Ponto_ColetasController extends Controller
 
             $insert_id = Module::updateRow("Ponto_Coletas", $request, $id);
 
-            return redirect()->route(config('laraadmin.adminRoute') . '.ponto_coletas.index');
+            return redirect()->route('ponto_coletas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -209,7 +209,7 @@ class Ponto_ColetasController extends Controller
             Ponto_Coleta::find($id)->delete();
 
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.ponto_coletas.index');
+            return redirect()->route('ponto_coletas.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
@@ -249,7 +249,7 @@ class Ponto_ColetasController extends Controller
                 }
 
                 if (Module::hasAccess("Ponto_Coletas", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.ponto_coletas.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['ponto_coletas.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }

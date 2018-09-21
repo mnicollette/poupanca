@@ -26,7 +26,7 @@ class BackupsController extends Controller
     public $view_col = 'name';
     public $listing_cols = ['id', 'name', 'file_name'];
     public $backup_filepath = "/storage/app/http---localhost/";
-    
+
     public function __construct()
     {
         // Field Access of Listing Columns
@@ -39,7 +39,7 @@ class BackupsController extends Controller
             $this->listing_cols = ModuleFields::listingColumnAccessScan('Backups', $this->listing_cols);
         }
     }
-    
+
     /**
      * Display a listing of the Backups.
      *
@@ -48,7 +48,7 @@ class BackupsController extends Controller
     public function index()
     {
         $module = Module::get('Backups');
-        
+
         if (Module::hasAccess($module->id)) {
             return View('la.backups.index', [
                 'show_actions' => $this->show_action,
@@ -70,7 +70,7 @@ class BackupsController extends Controller
         if (Module::hasAccess("Backups", "create")) {
             $exitCode = Artisan::call('backup:run');
             $outputStr = Artisan::output();
-            
+
             if (LAHelper::getLineWithString2($outputStr, "Copying ") == -1) {
                 if (LAHelper::getLineWithString2($outputStr, "mysqldump: No such file or directory") != -1) {
                     return response()->json([
@@ -90,16 +90,16 @@ class BackupsController extends Controller
                 $dataStr = LAHelper::getLineWithString2($outputStr, "Copying ");
                 $dataStr = str_replace("Copying ", "", $dataStr);
                 $dataStr = substr($dataStr, 0, strpos($dataStr, ")"));
-                
+
                 $file_name = substr($dataStr, 0, strpos($dataStr, "(") - 1);
                 $name = str_replace(".zip", "", $file_name);
                 $backup_size = substr($dataStr, strpos($dataStr, "(") + 7);
-                
+
                 $request->name = $name;
                 $request->file_name = $file_name;
                 $request->backup_size = $backup_size;
                 $insert_id = Module::insert("Backups", $request);
-                
+
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Backup successfully created.',
@@ -129,16 +129,16 @@ class BackupsController extends Controller
             $path = str_replace("/storage", "", $this->backup_filepath. $backup->file_name);
 
             unlink(storage_path($path));
-            
+
             $backup->delete();
-            
+
             // Redirecting to index() method
-            return redirect()->route(config('laraadmin.adminRoute') . '.backups.index');
+            return redirect()->route('backups.index');
         } else {
             return redirect(config('laraadmin.adminRoute')."/");
         }
     }
-    
+
     /**
      * Datatable Ajax fetch
      *
@@ -151,7 +151,7 @@ class BackupsController extends Controller
         $data = $out->getData();
 
         $fields_popup = ModuleFields::getModuleFields('Backups');
-        
+
         for ($i=0; $i < count($data->data); $i++) {
             for ($j=0; $j < count($this->listing_cols); $j++) {
                 $col = $this->listing_cols[$j];
@@ -159,18 +159,19 @@ class BackupsController extends Controller
                     $data->data[$i][$j] = ModuleFields::getFieldValue($fields_popup[$col], $data->data[$i][$j]);
                 }
                 if ($col == $this->view_col) {
-                    $data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/backups/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
+                    $data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/downloadBackup/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
+                    //$data->data[$i][$j] = '<a href="'.url(config('laraadmin.adminRoute') . '/backups/'.$data->data[$i][0]).'">'.$data->data[$i][$j].'</a>';
                 } else if ($col == "file_name") {
                     $data->data[$i][$j] = $this->backup_filepath.$data->data[$i][$j];
                 }
             }
-            
+
             if ($this->show_action) {
                 $output = '';
                 $output .= '<a href="'.url(config('laraadmin.adminRoute') . '/downloadBackup/'.$data->data[$i][0]).'" class="btn btn-warning btn-xs" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-download"></i></a>';
-                
+
                 if (Module::hasAccess("Backups", "delete")) {
-                    $output .= Form::open(['route' => [config('laraadmin.adminRoute') . '.backups.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
+                    $output .= Form::open(['route' => ['backups.destroy', $data->data[$i][0]], 'method' => 'delete', 'style'=>'display:inline']);
                     $output .= ' <button class="btn btn-danger btn-xs" type="submit"><i class="fa fa-times"></i></button>';
                     $output .= Form::close();
                 }
